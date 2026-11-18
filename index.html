@@ -229,8 +229,30 @@ section.night { background: var(--night); color: var(--night-ink); padding: 104p
 .live b { font: 700 15px var(--body); }
 .live span { color: #B9C2DA; font-size: 13px; }
 .bar-track { height: 8px; background: rgba(255,255,255,.15); border-radius: 8px; overflow: hidden; }
-.bar-fill { height: 100%; width: 64%; background: #5AB0FF; border-radius: 8px; animation: walk 6s ease-in-out infinite alternate; }
-@keyframes walk { from { width: 52%; } to { width: 74%; } }
+.bar-fill { height: 100%; width: 72%; background: #FFB020; border-radius: 8px; animation: lkFill 14s linear infinite; }
+/* Lock screen loop (14 s): walk, late, "Everything OK?" with 112, "I'm OK", arrive. Base styles = the late frame (reduced motion). */
+.live-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.stack { display: grid; } .stack > * { grid-area: 1 / 1; }
+.lk-eta { opacity: 0; animation: lkEta 14s linear infinite; }
+.lk-late { color: #FFB020 !important; font-weight: 600; animation: lkLate 14s linear infinite; }
+.lk-arr { color: #6EE7A8 !important; font-weight: 600; opacity: 0; animation: lkArr 14s linear infinite; }
+.lock .time .t1, .lock .time .t3 { opacity: 0; } .lock .time .t1 { animation: lkT1 14s linear infinite; } .lock .time .t2 { animation: lkT2 14s linear infinite; } .lock .time .t3 { animation: lkT3 14s linear infinite; }
+.lk-alert { margin-top: 14px; background: #fff; color: #0D1330; border-radius: 22px; padding: 16px; text-align: center; animation: lkAlert 14s ease-out infinite; }
+.lk-alert b { display: block; font: 800 20px var(--display); letter-spacing: -.02em; }
+.lk-alert p { color: #5B6482; font-size: 13.5px; margin: 4px 0 12px; }
+.lk-btn { border-radius: 13px; padding: 11px; font: 600 14.5px var(--body); color: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; }
+.lk-ok { background: #2F7BFF; animation: lkOk 14s linear infinite; }
+.lk-help { background: #E5484D; margin-top: 8px; animation: lkHelp 14s ease-in-out infinite; }
+@keyframes lkFill { 0% { width: 40%; background: #5AB0FF; } 22% { width: 72%; background: #5AB0FF; } 25%, 66% { width: 72%; background: #FFB020; } 69% { width: 72%; background: #5AB0FF; } 83% { width: 100%; background: #5AB0FF; } 85%, 97% { width: 100%; background: #22C47A; } 100% { width: 40%; background: #5AB0FF; } }
+@keyframes lkEta { 0%, 23% { opacity: 1; } 25%, 67% { opacity: 0; } 69%, 83% { opacity: 1; } 85%, 100% { opacity: 0; } }
+@keyframes lkLate { 0%, 23% { opacity: 0; } 25%, 66% { opacity: 1; } 68%, 100% { opacity: 0; } }
+@keyframes lkArr { 0%, 84% { opacity: 0; } 86%, 97% { opacity: 1; } 99%, 100% { opacity: 0; } }
+@keyframes lkT1 { 0%, 24% { opacity: 1; } 26%, 100% { opacity: 0; } }
+@keyframes lkT2 { 0%, 24% { opacity: 0; } 26%, 82% { opacity: 1; } 84%, 100% { opacity: 0; } }
+@keyframes lkT3 { 0%, 82% { opacity: 0; } 84%, 98% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes lkAlert { 0%, 29% { opacity: 0; transform: translateY(14px) scale(.97); } 33%, 64% { opacity: 1; transform: none; } 68%, 100% { opacity: 0; transform: translateY(-8px); } }
+@keyframes lkOk { 0%, 59% { background: #2F7BFF; transform: none; } 61% { background: #2F7BFF; transform: scale(.95); } 63%, 100% { background: #22C47A; transform: none; } }
+@keyframes lkHelp { 0%, 38% { box-shadow: 0 0 0 0 rgba(229,72,77,0); } 42% { box-shadow: 0 0 0 7px rgba(229,72,77,.35); } 46% { box-shadow: 0 0 0 0 rgba(229,72,77,0); } 50% { box-shadow: 0 0 0 7px rgba(229,72,77,.35); } 54%, 100% { box-shadow: 0 0 0 0 rgba(229,72,77,0); } }
 
 /* Privacy */
 section.priv { padding: 104px 0 64px; }
@@ -481,12 +503,18 @@ footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; }
         <ul><li data-i="safe_p1"></li><li data-i="safe_p2"></li><li data-i="safe_p3"></li><li data-i="safe_p4"></li></ul>
       </div>
       <div class="lock" aria-hidden="true">
-        <div class="time">23:41</div>
+        <div class="time stack"><span class="t1">23:41</span><span class="t2">23:58</span><span class="t3">00:04</span></div>
         <div class="date">🔒</div>
         <div class="live">
-          <b>Kaminu · <span data-i="safe_tag"></span></b>
+          <div class="live-head"><b>Kaminu Secure</b><span data-i="v_live"></span></div>
           <div class="bar-track"><div class="bar-fill"></div></div>
-          <span>23:52 · Hotel</span>
+          <div class="stack"><span class="lk-eta">23:52 · <span data-i="v_hotel"></span></span><span class="lk-late" data-i="v_late"></span><span class="lk-arr" data-i="v_arrived"></span></div>
+        </div>
+        <div class="lk-alert">
+          <b data-i="v_chk"></b>
+          <p data-i="v_chkb"></p>
+          <div class="lk-btn lk-ok" data-i="v_ok"></div>
+          <div class="lk-btn lk-help"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span data-i="v_help"></span></div>
         </div>
       </div>
     </div>
